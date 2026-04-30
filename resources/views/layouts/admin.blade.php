@@ -22,7 +22,7 @@
                 <div class="sidebar-header position-relative">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="logo">
-                            <a href="#">Admin</a>
+                            <a href="#">Hercules</a>
                         </div>
                         <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -58,21 +58,23 @@
                     </div>
                 </div>
                 <div class="sidebar-menu">
-                    <ul class="menu">
-                                                
-                        <li
-                            class="sidebar-item active ">
+                    <ul class="menu">                      
+                        <li class="sidebar-item active ">
                             <a href="{{ route('home') }}" class='sidebar-link'>
                                 <i class="bi bi-person"></i>
                                 <span>{{ Auth::user()->name }}</span>
                             </a>
-                            
                         </li>
                         
-                        <li class="sidebar-title">Ajustes</li>
+
+                        <li class="sidebar-item">
+                            <a href="" class="sidebar-link">
+                                <i class="bi bi-sliders2"></i>
+                                <span>Administración General</span>
+                            </a>
+                        </li>
                         
-                        <li
-                            class="sidebar-item  has-sub">
+                        <!--<li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-gear"></i>
                                 <span>Configuraciones</span>
@@ -97,38 +99,19 @@
                                     Ajustes</a>
                                     
                                 </li>
-                                
-                                <li class="submenu-item  ">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
-                                        <i class="bi bi-door-open-fill"></i>
-                                        Cerrar sesión
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
                             </ul>
-                        </li>
-
-                        <li class="sidebar-title">Productos</li>
-                        <li class="sidebar-item has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-box-seam"></i>
-                                <span>Productos</span>
+                        </li> -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                <i class="bi bi-door-open-fill"></i>
+                                <span>Cerrar sesión</span>
                             </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item  ">
-                                    <a href="{{ route('products.index') }}" class="submenu-link">
-                                    <i class="bi bi-box-seam"></i>
-                                    Listado de productos</a>
-                                </li>
-                                <li class="submenu-item  ">
-                                    <a href="{{ route('products.create') }}" class="submenu-link">
-                                    <i class="bi bi-plus-square-fill"></i>
-                                    Crear producto</a>      
-                        </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li> 
                     </ul>
                 </div>
             </div>

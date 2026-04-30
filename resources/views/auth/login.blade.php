@@ -16,21 +16,20 @@
 <body>
     <script src="{{asset('assets/static/js/initTheme.js')}}"></script>
     <div id="auth">
-        
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div class="auth-logo">
-                        <!--<a href="#"><img src="{{asset('assets/compiled/svg/logoIgnacio.svg')}}" style="width: 100px; height: auto;" alt="Logo" srcset="">Ignacio</a>-->
+                    <div class="auth-logo" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                        <a href="#"><img src="{{asset('assets/static/images/logo/logo.png')}}" style="width: 100px; height: auto;" alt="Logo" srcset=""></a>
                     </div>
-                    <h1>Autorepuestos Ignacio</h1>
+                    <h1 style="text-align: center">GIMNASIO HERCULES</h1>
                     <p class="auth-subtitle mb-5">Inicia sesión con tus datos personales.</p>
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input id="email" class="form-control form-control-xl" placeholder="Correo Electrónico" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <input id="email" class="form-control form-control-xl @error('email') is-invalid @enderror" placeholder="Correo Electrónico" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -42,7 +41,7 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input id="password" class="form-control form-control-xl" placeholder="Contraseña" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                            <input id="password" class="form-control form-control-xl @error('password') is-invalid @enderror" placeholder="Contraseña" type="password" name="password" required autocomplete="current-password">
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -55,7 +54,7 @@
                         </div>
                         
                         <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
-                            {{ __('Login') }}
+                            {{ __('Iniciar Sesión') }}
                         </button>
                     </form>
                 </div>
