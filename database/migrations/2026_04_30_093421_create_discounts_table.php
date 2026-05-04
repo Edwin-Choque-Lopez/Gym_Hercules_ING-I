@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->string('ci')->unique();
-            $table->string('full_name');
+            $table->string('name');
+            $table->decimal('porcentage', 2, 2);
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->boolean('active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('discounts');
     }
 };
