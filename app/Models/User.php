@@ -7,6 +7,8 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -19,10 +21,22 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'ci',
         'name',
+        'phone',
         'email',
         'password',
+        'role_id',
+
     ];
+    public function role():BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+    public function sales():HasMany
+    {
+        return $this->hasMany(Sale::class, 'user_id', 'id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
