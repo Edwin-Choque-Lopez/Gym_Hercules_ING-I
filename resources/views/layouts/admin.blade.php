@@ -68,39 +68,62 @@
                         
 
                         <li class="sidebar-item">
-                            <a href="" class="sidebar-link">
+                            <a href="{{ route('administration') }}" class="sidebar-link">
                                 <i class="bi bi-sliders2"></i>
                                 <span>Administración General</span>
                             </a>
                         </li>
                         
-                        <!--<li class="sidebar-item  has-sub">
+                        <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-gear"></i>
-                                <span>Configuraciones</span>
+                                <i class="bi bi-people-fill"></i>
+                                <span>Usuarios</span>
                             </a>
                             
                             <ul class="submenu ">
                                 
-                                <li class="submenu-item  ">
-                                    <a href="component-accordion.html" class="submenu-link">
-                                    <i class="bi bi-person-raised-hand"></i>
-                                    Perfil</a>
+                                <li class="submenu-item has-sub"> 
+                                    <a href="#" class="submenu-link">
+                                        <i class="bi bi-gear"></i>
+                                        <span>Sistema</span>
+                                    </a>
+                                    <ul class="submenu submenu-level-2 ">
+                                        <li class="submenu-item">
+                                            <a href="" class="submenu-link">
+                                                <i class="bi bi-person"></i>
+                                                <span>Roles / Metodos de pago </span>
+                                            </a>
+                                        </li>
+                                        <li class="submenu-item">
+                                            <a href="" class="submenu-link">
+                                                <i class="bi bi-person"></i>
+                                                <span>Usuarios</span>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
                                 </li>
                                 <li class="submenu-item">
-                                    <a href="component-badge.html" class="submenu-link">
-                                    <i class="bi bi-building"></i>
-                                    Datos Institucionales</a>
+                                    <a href="" class="submenu-link">
+                                        <i class="bi bi-person-vcard"></i>
+                                        <span>Miembros</span>
+                                    </a>
                                 </li>
                                 
                                 <li class="submenu-item  ">
-                                    <a href="{{ route('setting.index') }}" class="submenu-link">
-                                    <i class="bi bi-gear-fill"></i>
-                                    Ajustes</a>
-                                    
+                                    <a href="" class="submenu-link">
+                                        <i class="bi bi-person-fill"></i>
+                                        <span>Clientes</span>
+                                    </a>
                                 </li>
                             </ul>
-                        </li> -->
+                        </li> 
+                        <li class="sidebar-item">
+                            <a href="" class="sidebar-link">
+                                <i class="bi bi-cart"></i>
+                                <span>Productos</span>
+                            </a>
+                        </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
@@ -140,17 +163,16 @@
                 @yield('content')
             </div>
 
-            <!--<footer>
+            <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div class="float-start">
-                        <p>2023 &copy; Mazer</p>
+                        <p><i class="bi bi-laptop"></i> INF 2720 A </p>
                     </div>
                     <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                            by <a href="https://saugi.me">Saugi</a></p>
+                        <p>Proyecto de Ingeniera de Software I</p>
                     </div>
                 </div>
-            </footer>-->
+            </footer>
         </div>
     </div>
     <script src={{url("/assets/static/js/components/dark.js")}}></script>
@@ -160,6 +182,22 @@
     <!-- Need: Apexcharts -->
     <script src={{url("/assets/extensions/apexcharts/apexcharts.min.js")}}></script>
     <script src={{url("/assets/static/js/pages/dashboard.js")}}></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session()->has('icon') && session()->has('message'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    position: 'center',
+                    icon: @json(session('icon')),
+                    title: @json(session('title')),
+                    text: @json(session('message')),
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            });
+        </script>
+    @endif
 </body>
 
 </html>
