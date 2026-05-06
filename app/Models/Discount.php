@@ -16,7 +16,7 @@ class Discount extends Model
         'percentage',
         'start_date',
         'end_date',
-        'active'
+        'for_members',
     ];
 
     public function sales():HasMany

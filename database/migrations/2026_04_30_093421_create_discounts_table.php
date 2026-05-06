@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('porcentage', 2, 2);
+            $table->decimal('percentage', 2, 2);
             $table->date('start_date');
             $table->date('end_date');
-            $table->boolean('active')->default(true);
+            $table->boolean('for_members')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });
