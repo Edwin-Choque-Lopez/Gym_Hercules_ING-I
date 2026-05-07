@@ -91,9 +91,9 @@
                         <table class="table table-hover table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Acciones</th>
+                                    <th style="text-align: center;">Nombre</th>
+                                    <th style="text-align: center;">Descripción</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,10 +108,13 @@
                                             <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#editcategory{{ $category->id }}">
                                                 <i class="bi bi-pen"></i>
                                             </button>
-                                            <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline">
+                                            <form id="delete-category-{{ $category->id }}" action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ $category->id }})"><i class="bi bi-trash"></i></button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                        onclick="confirmDelete('delete-category-{{ $category->id }}', 'esta categoría')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -379,9 +382,9 @@
                         <table class="table table-hover table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Descuento</th>
-                                    <th>Aplica a</th>
+                                    <th style="text-align: center;">Nombre</th>
+                                    <th style="text-align: center;">Descuento</th>
+                                    <th style="text-align: center;">Aplica a</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -402,10 +405,13 @@
                                             <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#editdiscount{{ $discount->id }}">
                                                 <i class="bi bi-pen"></i>
                                             </button>
-                                            <form id="delete-form-{{ $discount->id }}" action="{{ route('discounts.destroy', $discount->id) }}" method="POST" class="d-inline">
+                                            <form id="delete-discount-{{ $discount->id }}" action="{{ route('discounts.destroy', $discount->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ $category->id }})"><i class="bi bi-trash"></i></button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                        onclick="confirmDelete('delete-discount-{{ $discount->id }}', 'este descuento')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -619,9 +625,9 @@
                             </div>
                         @endforeach
 
-                        @if ($categories->hasPages())
+                        @if ($discounts->hasPages())
                             <div class="d-flex justify-content-left">
-                                {{ $categories->links('pagination::bootstrap-5') }}
+                                {{ $discounts->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>
@@ -665,35 +671,36 @@
 @endif
 
 <script>
-function confirmDelete(categoryId) {
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: "btn btn-success",
-            cancelButton: "btn btn-danger"
-        },
-        buttonsStyling: false
-    });
-    swalWithBootstrapButtons.fire({
-        title: "¿Estás seguro?",
-        text: "¡No podrás revertir esto!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, eliminarlo!",
-        cancelButtonText: "No, cancelar!",
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('delete-form-' + categoryId).submit();
-            
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            swalWithBootstrapButtons.fire({
-                title: "Cancelado",
-                text: "Tu categoría está a salvo :)",
-                icon: "error"
-            });
-        }
-    });
-}
+    function confirmDelete(formId, itemName) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success ms-2", // Añadí margen para que no se peguen
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: "¿Estás seguro?",
+            text: "Vas a eliminar " + itemName + ". ¡No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar!",
+            cancelButtonText: "No, cancelar",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envía el formulario que recibió por parámetro
+                document.getElementById(formId).submit();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelado",
+                    text: "El registro está a salvo :)",
+                    icon: "error"
+                });
+            }
+        });
+    }
 </script>
 
 @endsection

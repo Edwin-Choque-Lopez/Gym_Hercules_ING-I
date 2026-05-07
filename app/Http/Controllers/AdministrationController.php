@@ -130,4 +130,10 @@ class AdministrationController extends Controller
         $discount->update($data);
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Descuento actualizado')->with('message', 'Los datos del descuento se han actualizado exitosamente.');
     }
+    public function discountdestroy($id)
+    {
+        $discount = Discount::findOrFail($id);
+        $discount->delete();
+        return redirect()->route('administration')->with('icon', 'success')->with('title', 'Descuento eliminado')->with('message', 'Los datos del descuento se han eliminado exitosamente.');
+    }
 }

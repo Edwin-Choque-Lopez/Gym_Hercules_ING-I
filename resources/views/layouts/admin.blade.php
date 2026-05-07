@@ -65,13 +65,25 @@
                                 <span>{{ Auth::user()->name }}</span>
                             </a>
                         </li>
-                        
-
-                        <li class="sidebar-item">
-                            <a href="{{ route('administration') }}" class="sidebar-link">
-                                <i class="bi bi-sliders2"></i>
-                                <span>Administración General</span>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-speedometer2"></i>
+                                <span>Gestión de Sistema</span>
                             </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item">
+                                    <a href="{{ route('administration') }}" class="submenu-link">
+                                        <i class="bi bi-sliders2"></i>
+                                        <span>Administración</span>
+                                    </a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{ route('parameters') }}" class="submenu-link">
+                                        <i class="bi bi-gear"></i>
+                                        <span>Parámetros</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         
                         <li class="sidebar-item  has-sub">
@@ -81,27 +93,11 @@
                             </a>
                             
                             <ul class="submenu ">
-                                
-                                <li class="submenu-item has-sub"> 
-                                    <a href="#" class="submenu-link">
-                                        <i class="bi bi-gear"></i>
-                                        <span>Sistema</span>
+                                <li class="submenu-item">
+                                    <a href="" class="submenu-link">
+                                        <i class="bi bi-person"></i>
+                                        <span>Usuarios</span>
                                     </a>
-                                    <ul class="submenu submenu-level-2 ">
-                                        <li class="submenu-item">
-                                            <a href="" class="submenu-link">
-                                                <i class="bi bi-person"></i>
-                                                <span>Roles / Metodos de pago </span>
-                                            </a>
-                                        </li>
-                                        <li class="submenu-item">
-                                            <a href="" class="submenu-link">
-                                                <i class="bi bi-person"></i>
-                                                <span>Usuarios</span>
-                                            </a>
-                                        </li>
-                                        
-                                    </ul>
                                 </li>
                                 <li class="submenu-item">
                                     <a href="" class="submenu-link">
