@@ -94,20 +94,20 @@
                             
                             <ul class="submenu ">
                                 <li class="submenu-item">
-                                    <a href="" class="submenu-link">
+                                    <a href="{{ route('users') }}" class="submenu-link">
                                         <i class="bi bi-person"></i>
                                         <span>Usuarios</span>
                                     </a>
                                 </li>
                                 <li class="submenu-item">
-                                    <a href="" class="submenu-link">
+                                    <a href="{{ route('members') }}" class="submenu-link">
                                         <i class="bi bi-person-vcard"></i>
                                         <span>Miembros</span>
                                     </a>
                                 </li>
                                 
                                 <li class="submenu-item  ">
-                                    <a href="" class="submenu-link">
+                                    <a href="{{ route('customers') }}" class="submenu-link">
                                         <i class="bi bi-person-fill"></i>
                                         <span>Clientes</span>
                                     </a>

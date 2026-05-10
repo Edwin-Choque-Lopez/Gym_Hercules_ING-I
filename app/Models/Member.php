@@ -15,7 +15,6 @@ class Member extends Model
         'full_name',
         'phone',
         'is_active',
-
     ];
 
     public function sales():HasMany

@@ -27,3 +27,24 @@ Route::get('/parameters', [App\Http\Controllers\ParameterController::class, 'ind
 Route::post('/paymenttypes', [App\Http\Controllers\ParameterController::class, 'paymenttypestore'])->name('paymenttypes.create');
 Route::put('/paymenttypes/{id}', [App\Http\Controllers\ParameterController::class, 'paymenttypeupdate'])->name('paymenttypes.update');
 Route::delete('/paymenttypes/{id}', [App\Http\Controllers\ParameterController::class, 'paymenttypedestroy'])->name('paymenttypes.destroy'); 
+
+Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users');
+Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+Route::put('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');  
+
+Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products');
+Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+Route::put('/products/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
+Route::delete('/products/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');  
+
+Route::get('/customers', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers');
+Route::post('/customers', [App\Http\Controllers\CustomerController::class, 'store'])->name('customers.store');
+Route::put('/customers/{id}', [App\Http\Controllers\CustomerController::class, 'update'])->name('customers.update');
+Route::delete('/customers/{id}', [App\Http\Controllers\CustomerController::class, 'destroy'])->name('customers.destroy');   
+
+Route::get('/members', [App\Http\Controllers\MemberController::class, 'index'])->name('members');
+
+
+
+
