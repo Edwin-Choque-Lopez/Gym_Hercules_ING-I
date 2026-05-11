@@ -323,7 +323,7 @@
                                                     <label for="oem" class="form-label">C.I.*</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-person-vcard-fill"></i></span>
-                                                        <input name="ci" type="text" class="form-control @error('ci') is-invalid @enderror" placeholder="C.I. del usuario"
+                                                        <input name="ci" type="text" class="form-control"
                                                         value="{{ $user->ci }}" readonly>
                                                     </div>
                                                 </div>
@@ -331,7 +331,7 @@
                                                     <label for="oem" class="form-label">Rol de Usuario</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-people-fill"></i></i></span>
-                                                        <input name="role_id" type="text" class="form-control @error('role_id') is-invalid @enderror" placeholder="Rol del usuario"
+                                                        <input name="role_id" type="text" class="form-control"
                                                         value="{{ $user->role->name }}" readonly>
                                                     </div>
                                                 </div>
@@ -339,7 +339,7 @@
                                                     <label for="oem" class="form-label">Nombre Completo*</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-pen"></i></span>
-                                                        <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre completo del usuario"
+                                                        <input name="name" type="text" class="form-control"
                                                         value="{{ $user->name }}" readonly>
                                                     </div>
                                                 </div>
@@ -347,7 +347,7 @@
                                                     <label for="oem" class="form-label">Teléfono del Usuario</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
-                                                        <input name="phone" type="text" class="form-control @error('phone') is-invalid @enderror" placeholder="Teléfono del usuario"
+                                                        <input name="phone" type="text" class="form-control"
                                                         value="{{ $user->phone }}" readonly>
                                                     </div>
                                                 </div>
@@ -355,7 +355,7 @@
                                                     <label for="oem" class="form-label">Correo Electrónico*</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
-                                                        <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Correo electrónico del usuario"
+                                                        <input name="email" type="email" class="form-control"
                                                         value="{{ $user->email }}" readonly>
                                                     </div>
                                                 </div>
@@ -408,7 +408,7 @@
 @endif
 
 <script>
-// Toggle password visibility
+
 document.querySelectorAll('.toggle-password').forEach(toggle => {
     toggle.addEventListener('click', function() {
         const targetId = this.getAttribute('data-target');
@@ -427,7 +427,7 @@ document.querySelectorAll('.toggle-password').forEach(toggle => {
     });
 });
 
-function confirmDelete(categoryId) {
+function confirmDelete(userId) {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: "btn btn-success",
@@ -445,12 +445,12 @@ function confirmDelete(categoryId) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById('delete-form-' + categoryId).submit();
+            document.getElementById('delete-form-' + userId).submit();
             
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             swalWithBootstrapButtons.fire({
                 title: "Cancelado",
-                text: "Tu categoría está a salvo :)",
+                text: "Tu usuario está a salvo :)",
                 icon: "error"
             });
         }

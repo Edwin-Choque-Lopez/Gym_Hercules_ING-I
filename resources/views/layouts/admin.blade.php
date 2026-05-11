@@ -115,7 +115,7 @@
                             </ul>
                         </li> 
                         <li class="sidebar-item">
-                            <a href="" class="sidebar-link">
+                            <a href="{{ route('products') }}" class="sidebar-link">
                                 <i class="bi bi-cart"></i>
                                 <span>Productos</span>
                             </a>

@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="#">Clientes</a></li>
+            <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
             <li class="breadcrumb-item active" aria-current="page">Clientes</li>
         </ol>
     </nav>
@@ -196,7 +196,7 @@
                                             <input type="hidden" name="edit_id" value="{{ $customer->id }}">
                                             <div class="row">
                                                 <div class="col-md-12 mb-3">
-                                                    <label for="oem" class="form-label">C.I.*</label>
+                                                    <label for="oem" class="form-label">C.I.</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-person-vcard-fill"></i></span>
                                                         <input name="ci" type="text" class="form-control @error('ci') is-invalid @enderror" placeholder="C.I. del usuario"
@@ -204,7 +204,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 mb-3">
-                                                    <label for="oem" class="form-label">Nombre Completo*</label>
+                                                    <label for="oem" class="form-label">Nombre Completo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="bi bi-pen"></i></span>
                                                         <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre completo del usuario"
@@ -261,7 +261,7 @@
 
 <script>
 
-function confirmDelete(categoryId) {
+function confirmDelete(customerId) {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: "btn btn-success",
@@ -279,7 +279,7 @@ function confirmDelete(categoryId) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById('delete-form-' + categoryId).submit();
+            document.getElementById('delete-form-' + customerId).submit();
             
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             swalWithBootstrapButtons.fire({

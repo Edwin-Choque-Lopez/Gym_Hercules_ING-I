@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('title')
-    <h3>Parametros del Sistema</h3>
-    <p class="text-subtitle text-muted">En este apartado puede gestionar los tipos de pagos para el sistema y ver los roles</p>
+    <h3>Miembros del Sistema</h3>
+    <p class="text-subtitle text-muted">En este apartado podra ver la informacion de los miembros del gimnasio</p>
 @endsection
 @section('navegacion')
     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Parametros</li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}">Usuarios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Miembros</li>
         </ol>
     </nav>
 @endsection
