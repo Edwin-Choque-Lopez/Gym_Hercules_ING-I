@@ -31,9 +31,11 @@ class CustomerController extends Controller
         $customer = new Customer();
         $customer->ci = $request->ci;
         $customer->full_name = $request->name;
-        $customer->save();
-        return redirect()->route('customers')->with('icon', 'success')->with('title', 'Cliente creado')->with('message', 'El cliente se ha creado exitosamente.');
-        //return response()->json($request->all());
+        if ($customer->save()){
+            return redirect()->route('customers')->with('icon', 'success')->with('title', 'Cliente creado')->with('message', 'El cliente se ha creado exitosamente.');
+        }else{
+            return redirect()->route('customers')->with('icon','error')->with('title','Error')->with('message','Ocurrió un error al registrar al cliente, por favor intente nuevmanete');
+        }
     }
 
     public function update(Request $request, $id)

@@ -45,6 +45,10 @@ Route::delete('/customers/{id}', [App\Http\Controllers\CustomerController::class
 
 Route::get('/members', [App\Http\Controllers\MemberController::class, 'index'])->name('members');
 
+Route::get('/sale',[App\Http\Controllers\SaleController::class, 'index'])->name('sale');
+Route::post('/sale/client',[App\Http\Controllers\SaleController::class, 'searchclient'])->name('searchclient');
+Route::post('/sale/member',[App\Http\Controllers\SaleController::class, 'searchmember'])->name('searchmember');
+
 
 
 
