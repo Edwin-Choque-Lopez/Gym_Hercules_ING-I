@@ -17,11 +17,11 @@
         <div class="col-12 col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">MÉTODOS DE PAGO</h4>
+                    <h4 class="card-title mb-0">Miembros del Gimnasio</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body">
-                        <p>En este apartado puede gestionar las categorías de productos del sistema.</p>
+                        <p>Esta es la lista de miembros del gimnasio.</p>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped">
                                 <thead>

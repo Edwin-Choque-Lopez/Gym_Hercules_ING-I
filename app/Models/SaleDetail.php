@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SaleDetail extends Model
 {
-    use softDeletes;
+    use SoftDeletes;
+
     protected $table = 'sale_details';
+
     protected $fillable = [
         'sale_id',
         'product_id',
@@ -17,13 +19,14 @@ class SaleDetail extends Model
         'unit_price',
         'subtotal',
     ];
-    public function sale():BelongsTo
+
+    public function sale(): BelongsTo
     {
         return $this->belongsTo(Sale::class, 'sale_id', 'id');
     }
-    public function product():BelongsTo
+
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-    
 }

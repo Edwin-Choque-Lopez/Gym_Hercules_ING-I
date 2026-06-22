@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Categorie;
 use App\Models\Discount;
+use Illuminate\Http\Request;
 
 class AdministrationController extends Controller
 {
@@ -12,8 +12,10 @@ class AdministrationController extends Controller
     {
         $discounts = Discount::paginate(5);
         $categories = Categorie::paginate(5);
+
         return view('administration.index', compact('categories', 'discounts'));
     }
+
     public function categorystore(Request $request)
     {
         $request->validate([
@@ -30,6 +32,7 @@ class AdministrationController extends Controller
             'description.regex' => 'El campo descripción solo puede contener letras, espacios, puntos y comas.',
         ]);
         Categorie::create($request->all());
+
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Categoría creada')->with('message', 'Los datos de la categoría se han guardado exitosamente.');
     }
 
@@ -38,7 +41,7 @@ class AdministrationController extends Controller
         $category = Categorie::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id . '|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñ. \s]+$/',
+            'name' => 'required|string|max:255|unique:categories,name,'.$category->id.'|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñ. \s]+$/',
             'description' => 'nullable|string|max:255|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñ0-9()., \s]+$/',
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
@@ -54,10 +57,12 @@ class AdministrationController extends Controller
 
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Categoría actualizada')->with('message', 'los datos de la categoría se han actualizado exitosamente.');
     }
+
     public function categorydestroy($id)
     {
         $category = Categorie::findOrFail($id);
         $category->delete();
+
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Categoría eliminada')->with('message', 'Los datos de la categoría se han eliminado exitosamente.');
     }
 
@@ -93,17 +98,19 @@ class AdministrationController extends Controller
         $data = $request->all();
         $data['percentage'] = $request->percentage / 100;
         Discount::create($data);
+
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Descuento creado')->with('message', 'Los datos del descuento se han guardado exitosamente.');
-    }   
+    }
+
     public function discountupdate(Request $request, $id)
     {
         $discount = Discount::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:discounts,name,' . $discount->id . '|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñ. \s]+$/',
+            'name' => 'required|string|max:255|unique:discounts,name,'.$discount->id.'|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñ. \s]+$/',
             'description' => 'nullable|string|max:255|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñ0-9()., \s]+$/',
             'percentage' => 'required|numeric|min:0|max:100',
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
@@ -120,7 +127,7 @@ class AdministrationController extends Controller
             'percentage.max' => 'El campo porcentaje no puede ser mayor que 100.',
             'start_date.required' => 'El campo fecha de inicio es obligatorio.',
             'start_date.date' => 'El campo fecha de inicio debe ser una fecha válida.',
-            'start_date.after_or_equal' => 'La fecha de inicio debe ser igual o posterior a la fecha actual.',
+            'start_date.before_or_equal' => 'La fecha de inicio debe ser posterior a la fecha de fin.',
             'end_date.required' => 'El campo fecha de fin es obligatorio.',
             'end_date.date' => 'El campo fecha de fin debe ser una fecha válida.',
             'end_date.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
@@ -128,12 +135,15 @@ class AdministrationController extends Controller
         $data = $request->all();
         $data['percentage'] = $request->percentage / 100;
         $discount->update($data);
+
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Descuento actualizado')->with('message', 'Los datos del descuento se han actualizado exitosamente.');
     }
+
     public function discountdestroy($id)
     {
         $discount = Discount::findOrFail($id);
         $discount->delete();
+
         return redirect()->route('administration')->with('icon', 'success')->with('title', 'Descuento eliminado')->with('message', 'Los datos del descuento se han eliminado exitosamente.');
     }
 }
