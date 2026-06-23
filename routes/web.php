@@ -53,6 +53,12 @@ Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('
 Route::get('/members', [MemberController::class, 'index'])->name('members');
 
 Route::get('/sale', [SaleController::class, 'index'])->name('sale');
+Route::get('/sale/clients', [SaleController::class, 'indexC'])->name('index.clients');
+Route::get('/sale/members', [SaleController::class, 'indexM'])->name('index.members');
+
+Route::get('/sale/show/{id}', [SaleController::class, 'saleshow'])->name('sales.show');
+
+
 Route::post('/sale/client', [SaleController::class, 'searchclients'])->name('searchclient');
 Route::post('/sale/member', [SaleController::class, 'searchmembers'])->name('searchmember');
 

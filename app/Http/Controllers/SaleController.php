@@ -19,6 +19,34 @@ class SaleController extends Controller
     {
         return view('sale.sale');
     }
+    public function indexM()
+    {
+        $sales = Sale::with(['member'])
+            ->whereNull('customer_id')
+            ->paginate(10);
+        return view('sale.members',compact('sales'));
+    }
+    public function indexC()
+    {
+        $sales = Sale::with(['customer'])
+            ->whereNull('member_id')
+            ->paginate(10);
+        return view('sale.clients',compact('sales'));
+        //return response()->json($sales);
+    }
+    public function saleshow($id)
+    {
+        $sale = Sale::with([
+            'customer',
+            'member',
+            'paymentType',
+            'discount',
+            'user',
+            'saleDetails.product.category',
+        ])->findOrFail($id);
+
+        return view('sale.saleshow', compact('sale'));
+    }
 
     public function searchmembers(Request $request)
     {
@@ -161,14 +189,14 @@ class SaleController extends Controller
             ->with('message', 'El producto fue removido y el stock se restauró con éxito.');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validated = $request->validate([
             'sale_id'          => 'required|exists:sales,id',
             'discount_id'      => 'nullable|exists:discounts,id',
             'payment_type_id'  => 'required|exists:payment_types,id',
             'subtotal'         => 'required|numeric|min:0',
-            'discount_payment' => 'required|numeric|min:0',
-            'total_amount'     => 'required|numeric|min:0',
+            'discount_payment' => 'required|numeric|min:0|lte:subtotal',
         ], [
             'sale_id.required'          => 'El identificador de la venta es obligatorio.',
             'sale_id.exists'            => 'La venta seleccionada no es válida o no existe.',
@@ -181,26 +209,25 @@ class SaleController extends Controller
             'discount_payment.required' => 'El monto del descuento es obligatorio.',
             'discount_payment.numeric'  => 'El descuento debe ser un valor numérico.',
             'discount_payment.min'      => 'El descuento no puede ser un número negativo.',
-            'total_amount.required'     => 'El monto total a pagar es obligatorio.',
-            'total_amount.numeric'      => 'El total debe ser un valor numérico.',
-            'total_amount.min'          => 'El total a pagar no puede ser un número negativo.',
+            'discount_payment.lte'      => 'El descuento no puede ser mayor que el subtotal.',
         ]);
 
         $sale = Sale::findOrFail($validated['sale_id']);
+        $totalAmount = max(0, $validated['subtotal'] - $validated['discount_payment']);
 
         // 2. Actualizamos todos los campos requeridos
         $sale->update([
             'payment_type_id'  => $validated['payment_type_id'],
-            'discount_id'      => $validated['discount_id'] ?? null, 
-            'total_amount'     => $validated['subtotal'],
+            'discount_id'      => $validated['discount_id'] ?? null,
+            'total_amount'     => $totalAmount,
             'discount_payment' => $validated['discount_payment'],
-            'state'            => false, 
+            'state'            => false,
         ]);
 
         return redirect()->route('home') 
             ->with('icon', 'success')
             ->with('title', '¡Venta Realizada!')
             ->with('message', "La venta #{$sale->id} ha sido procesada y registrada con éxito.");
-        }
+    }
     
 }

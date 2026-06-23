@@ -125,6 +125,26 @@
                                 <span>Vender</span>
                             </a>
                         </li>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-card-text"></i>
+                                <span>Ventas Realizadas</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item">
+                                    <a href="{{ route('index.members') }}" class="submenu-link">
+                                        <i class="bi bi-person-vcard"></i>
+                                        <span>Miembros</span>
+                                    </a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{ route('index.clients') }}" class="submenu-link">
+                                        <i class="bi bi-person-fill"></i>
+                                        <span>Clientes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
