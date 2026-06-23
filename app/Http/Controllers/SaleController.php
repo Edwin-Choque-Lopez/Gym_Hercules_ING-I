@@ -8,7 +8,10 @@ use App\Models\Member;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class SaleController extends Controller
 {
@@ -31,7 +34,7 @@ class SaleController extends Controller
         $ci = $request->member;
 
         return redirect()->route('search.member', ['ci' => $ci]);
-        // return response()->json($request);
+
     }
 
     public function searchclients(Request $request)
@@ -48,7 +51,6 @@ class SaleController extends Controller
         $ci = $request->client;
 
         return redirect()->route('search.client', ['ci' => $ci]);
-        // return response()->json($request);
     }
 
     public function searchclient($ci)
@@ -57,9 +59,27 @@ class SaleController extends Controller
         $products = Product::where('current_stock', '>', 0)->get();
         $discounts = Discount::where('start_date', '<=', now())->where('end_date', '>=', now())->where('for_members', '=', 0)->get();
         $role = 'client';
+        $paymentMethods=PaymentType::get();
+        $sale = Sale::firstOrCreate(
+            [
+                'customer_id' => $user->id, 
+                'state' => 1
+            ],
+            [
+                'user_id'          => Auth::id(),      
+                'member_id'        => null,         
+                'payment_type_id'  => null,             
+                'discount_id'      => null,              
+                'total_amount'     => 0.00,            
+                'discount_payment' => 0.00,             
+                'sale_date'        => Carbon::now()->toDateString(), 
+            ]
+        );
+        $saleDetails = SaleDetail::with('product')
+            ->where('sale_id', $sale->id)
+             ->get();
 
-        return view('sale.sale_form', compact('user', 'products', 'discounts', 'role'));
-        // return response()->json($client);
+        return view('sale.sale_form', compact('user', 'products', 'discounts', 'role','sale','saleDetails','paymentMethods'));
     }
 
     public function searchmember($ci)
@@ -68,92 +88,119 @@ class SaleController extends Controller
         $products = Product::where('current_stock', '>', 0)->get();
         $discounts = Discount::where('start_date', '<=', now())->where('end_date', '>=', now())->where('for_members', '=', 1)->get();
         $role = 'member';
-
-        return view('sale.sale_form', compact('user', 'products', 'discounts', 'role'));
-        // return response()->json($member);
+        $paymentMethods=PaymentType::get();
+        $sale = Sale::firstOrCreate(
+            [
+                'member_id' => $user->id, 
+                'state' => 1
+            ],
+            [
+                'user_id'          => Auth::id(),       
+                'customer_id'        => null,              
+                'payment_type_id'  => null,              
+                'discount_id'      => null,               
+                'total_amount'     => 0.00,            
+                'discount_payment' => 0.00,              
+                'sale_date'        => Carbon::now()->toDateString(), 
+            ]
+        );
+        $saleDetails = SaleDetail::with('product')
+            ->where('sale_id', $sale->id)
+            ->get();
+        return view('sale.sale_form', compact('user', 'products', 'discounts', 'role','sale','saleDetails','paymentMethods'));
     }
 
-    public function store(Request $request)
+    public function additem(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|integer',
-            'discount_id' => 'nullable|integer|exists:discounts,id',
-            'products' => 'required|array|min:1',
-            'products.*.id' => 'required|integer|exists:products,id',
-            'products.*.quantity' => 'required|integer|min:1',
-        ], [
-            'user_id.required' => 'El cliente es obligatorio.',
-            'products.required' => 'Debe agregar al menos un producto.',
-            'products.min' => 'Debe agregar al menos un producto.',
+        $validated = $request->validate([
+            'sale_id'    => 'required|exists:sales,id',
+            'product_id' => 'required|exists:products,id',
+            'quantity'   => 'required|integer|min:1|max:50',
         ]);
 
-        $subtotal = 0;
-        $products = [];
+        
+        $product = Product::findOrFail($validated['product_id']);
 
-        // Validar stock y calcular subtotal
-        foreach ($request->products as $productData) {
-            $product = Product::findOrFail($productData['id']);
-            $quantity = $productData['quantity'];
-
-            if ($product->current_stock < $quantity) {
-                return back()->withErrors(['stock' => "Stock insuficiente para {$product->name}. Disponible: {$product->current_stock}"]);
-            }
-
-            $subtotal += $product->price_sell * $quantity;
-            $products[] = [
-                'product' => $product,
-                'quantity' => $quantity,
-                'unit_price' => $product->price_sell,
-                'subtotal' => $product->price_sell * $quantity,
-            ];
+        if ($product->current_stock < $validated['quantity']) {
+            return redirect()->back()
+                ->with('icon', 'error')
+                ->with('title', 'Stock Insuficiente')
+                ->with('message', "Solo quedan {$product->current_stock} unidades disponibles de este producto.");
         }
 
-        // Calcular descuento
-        $discountAmount = 0;
-        if ($request->discount_id) {
-            $discount = Discount::findOrFail($request->discount_id);
-            $discountAmount = $subtotal * ($discount->percentage / 100);
-        }
+        $priceSell = $product->price_sell;
+        $quantity  = $validated['quantity'];
+        $subtotal  = $priceSell * $quantity;
 
-        $total = $subtotal - $discountAmount;
-
-        // Determinar si es cliente o miembro
-        $customerId = null;
-        $memberId = null;
-        $role = $request->input('user_role');
-
-        if ($role === 'member') {
-            $memberId = $request->user_id;
-        } else {
-            $customerId = $request->user_id;
-        }
-
-        // Crear venta
-        $sale = Sale::create([
-            'customer_id' => $customerId,
-            'member_id' => $memberId,
-            'discount_id' => $request->discount_id,
-            'user_id' => auth()->id(),
-            'payment_type_id' => 1, // Default
-            'total_amount' => $total,
-            'discount_payment' => $discountAmount,
-            'sale_date' => now()->toDateString(),
+        SaleDetail::create([
+            'sale_id'    => $validated['sale_id'],
+            'product_id' => $validated['product_id'],
+            'quantity'   => $quantity,
+            'unit_price' => $priceSell,
+            'subtotal'   => $subtotal,
         ]);
 
-        // Crear detalles de venta y actualizar stock
-        foreach ($products as $item) {
-            SaleDetail::create([
-                'sale_id' => $sale->id,
-                'product_id' => $item['product']->id,
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'subtotal' => $item['subtotal'],
-            ]);
+        $product->decrement('current_stock', $quantity);
 
-            // Actualizar stock
-            $item['product']->decrement('current_stock', $item['quantity']);
-        }
-
-        return redirect()->route('sale')->with('success', 'Venta realizada exitosamente.');
+        return redirect()->back();
     }
+
+    public function removeitem($id)
+    {
+        $detail = SaleDetail::findOrFail($id);
+        $product = Product::findOrFail($detail->product_id);
+        $product->increment('current_stock', $detail->quantity);
+
+        $sale = Sale::findOrFail($detail->sale_id);
+        $sale->decrement('total_amount', $detail->subtotal);
+        $detail->delete();
+
+        return redirect()->back()
+            ->with('icon', 'success')
+            ->with('title', 'Item Eliminado')
+            ->with('message', 'El producto fue removido y el stock se restauró con éxito.');
+    }
+
+    public function store(Request $request){
+        $validated = $request->validate([
+            'sale_id'          => 'required|exists:sales,id',
+            'discount_id'      => 'nullable|exists:discounts,id',
+            'payment_type_id'  => 'required|exists:payment_types,id',
+            'subtotal'         => 'required|numeric|min:0',
+            'discount_payment' => 'required|numeric|min:0',
+            'total_amount'     => 'required|numeric|min:0',
+        ], [
+            'sale_id.required'          => 'El identificador de la venta es obligatorio.',
+            'sale_id.exists'            => 'La venta seleccionada no es válida o no existe.',
+            'discount_id.exists'        => 'El descuento seleccionado no es válido.',
+            'payment_type_id.required'  => 'Debe seleccionar un método de pago para finalizar la venta.',
+            'payment_type_id.exists'    => 'El método de pago seleccionado no es válido.',
+            'subtotal.required'         => 'El subtotal es obligatorio.',
+            'subtotal.numeric'          => 'El subtotal debe ser un valor numérico.',
+            'subtotal.min'              => 'El subtotal no puede ser un número negativo.',
+            'discount_payment.required' => 'El monto del descuento es obligatorio.',
+            'discount_payment.numeric'  => 'El descuento debe ser un valor numérico.',
+            'discount_payment.min'      => 'El descuento no puede ser un número negativo.',
+            'total_amount.required'     => 'El monto total a pagar es obligatorio.',
+            'total_amount.numeric'      => 'El total debe ser un valor numérico.',
+            'total_amount.min'          => 'El total a pagar no puede ser un número negativo.',
+        ]);
+
+        $sale = Sale::findOrFail($validated['sale_id']);
+
+        // 2. Actualizamos todos los campos requeridos
+        $sale->update([
+            'payment_type_id'  => $validated['payment_type_id'],
+            'discount_id'      => $validated['discount_id'] ?? null, 
+            'total_amount'     => $validated['subtotal'],
+            'discount_payment' => $validated['discount_payment'],
+            'state'            => false, 
+        ]);
+
+        return redirect()->route('home') 
+            ->with('icon', 'success')
+            ->with('title', '¡Venta Realizada!')
+            ->with('message', "La venta #{$sale->id} ha sido procesada y registrada con éxito.");
+        }
+    
 }

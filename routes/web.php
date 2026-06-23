@@ -58,4 +58,8 @@ Route::post('/sale/member', [SaleController::class, 'searchmembers'])->name('sea
 
 Route::get('/sales/client/{ci}', [SaleController::class, 'searchclient'])->name('search.client');
 Route::get('/sales/member/{ci}', [SaleController::class, 'searchmember'])->name('search.member');
-Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
+
+Route::post('/sales/additem',[SaleController::class, 'additem'])->name('sale.additem');
+Route::delete('/sales/removeitem/{id}',[SaleController::class, 'removeitem'])->name('sale.removeitem');
+
+Route::post('/sale/save', [SaleController::class, 'store'])->name('sales.store');

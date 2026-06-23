@@ -70,7 +70,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price_buy' => 'required|numeric|min:0',
             'price_sell' => 'required|numeric|min:0',
-            'expiration_date' => 'required|date|after_or_equal:today',
+            'expiration_date' => 'required|date',
             'min_stock' => 'required|integer|min:0',
             'current_stock' => 'required|integer|min:0',
         ], [
@@ -93,7 +93,6 @@ class ProductController extends Controller
             'price_sell.min' => 'El precio de venta no puede ser negativo.',
             'expiration_date.required' => 'La fecha de vencimiento es obligatoria.',
             'expiration_date.date' => 'La fecha de vencimiento debe ser una fecha válida.',
-            'expiration_date.after_or_equal' => 'La fecha de vencimiento no puede ser anterior a hoy.',
             'min_stock.required' => 'El stock mínimo es obligatorio.',
             'min_stock.integer' => 'El stock mínimo debe ser un número entero.',
             'min_stock.min' => 'El stock mínimo no puede ser negativo.',

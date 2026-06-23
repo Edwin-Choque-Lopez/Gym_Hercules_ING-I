@@ -391,7 +391,7 @@
                                 @foreach($discounts as $discount)
                                     <tr>
                                         <td>{{ Str::limit($discount->name, 10, '...')  }}</td>
-                                        <td>{{ $discount->percentage }}%</td>
+                                        <td>{{ $discount->percentage * 100 }}%</td>
                                         <td>
                                             {!! $discount->for_members 
                                                 ? '<span class="badge bg-light-success">Miembro</span>' 

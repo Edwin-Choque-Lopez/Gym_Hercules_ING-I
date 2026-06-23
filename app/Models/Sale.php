@@ -22,6 +22,7 @@ class Sale extends Model
         'total_amount',
         'discount_payment',
         'sale_date',
+        'state'
     ];
 
     protected $dates = ['sale_date'];
